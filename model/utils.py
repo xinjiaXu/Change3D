@@ -252,7 +252,7 @@ def setup_logger(args, save_path):
         print(f"{arg}: {value}")
     logger.write('\n' + '-' * 60)
 
-    if args.dataset in ['LEVIR-CD', 'WHU-CD', 'CLCD']:
+    if args.dataset in ['LEVIR-CD', 'WHU-CD', 'CLCD', 'CDD', 'SYSU-CD', 'LEVIR-CD-PLUS']:
         logger.write("\n%s\t%s\t%s\t%s\t%s\t%s" % 
             ('Epoch', 'Kappa (val)', 'IoU (val)', 'F1 (val)', 'R (val)', 'P (val)'))
 
