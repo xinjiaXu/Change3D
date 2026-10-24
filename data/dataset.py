@@ -20,7 +20,9 @@ class BCDDataset(torch.utils.data.Dataset):
     corresponding change detection ground truth masks.
     """
 
-    def __init__(self, file_root: str, split: str, transform = None):
+    def __init__(self, file_root: str, split: str, transform=None,
+                 image_dir_a: str = 't1', image_dir_b: str = 't2',
+                 label_dir: str = 'label'):
         """
         Initialize the dataset with paths to images and transforms.
         
@@ -34,12 +36,12 @@ class BCDDataset(torch.utils.data.Dataset):
             raise FileNotFoundError(f"Dataset root path does not exist: {file_root}")
         
         # file list
-        self.file_list = os.listdir(osp(file_root, split, 'label'))
+        self.file_list = os.listdir(osp(file_root, split, label_dir))
             
         # Create paths for pre-change images, post-change images, and labels
-        self.pre_images = [osp(file_root, split, 't1', x) for x in self.file_list]
-        self.post_images = [osp(file_root, split, 't2', x) for x in self.file_list]
-        self.label_change = [osp(file_root, split, 'label', x) for x in self.file_list]
+        self.pre_images = [osp(file_root, split, image_dir_a, x) for x in self.file_list]
+        self.post_images = [osp(file_root, split, image_dir_b, x) for x in self.file_list]
+        self.label_change = [osp(file_root, split, label_dir, x) for x in self.file_list]
 
         # Store transform
         self.transform = transform

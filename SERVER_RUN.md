@@ -1,6 +1,6 @@
 # Change3D server setup
 
-The helper scripts keep the upstream model, optimizer, loss, augmentation, learning-rate schedule, input size, and iteration budget unchanged. They create a separate environment, expose existing dataset folders through symlinks, and direct outputs to `Change3D_work_dirs/<dataset>/`.
+The helper scripts keep the upstream model, optimizer, loss, augmentation, learning-rate schedule, input size, and iteration budget unchanged. The dataset loader reads the original folders under `/home/xxj/Data` directly; it does not copy data or create per-model dataset replicas. Outputs go to `Change3D_work_dirs/<dataset>/`.
 
 ## Server paths
 
@@ -30,13 +30,13 @@ wget -O model/X3D_L.pyth https://dl.fbaipublicfiles.com/pytorchvideo/model_zoo/k
 
 ## Dataset layout adaptation
 
-Run:
+Optionally verify the configured paths:
 
 ```bash
 bash prepare_server_data.sh /home/xxj/Data
 ```
 
-This creates `data_adapters/<dataset>/{train,val,test}/{t1,t2,label}` as symlinks. Source samples are not copied, renamed, resized, or modified.
+This checks that each dataset has the expected split and subdirectories. It does not create or modify dataset files.
 
 | Dataset key | Server source | Image folders | Label folder |
 | --- | --- | --- | --- |
@@ -46,7 +46,7 @@ This creates `data_adapters/<dataset>/{train,val,test}/{t1,t2,label}` as symlink
 | `whucd` | `/home/xxj/Data/WHUCD` | `A`, `B` | `label` |
 | `sysucd` | `/home/xxj/Data/SYSU_CD` | `time1`, `time2` | `label` |
 
-Change3D's BCD loader expects lowercase `train`, `val`, and `test` directories containing `t1`, `t2`, and `label`. The links adapt the supplied directory names to that interface.
+The BCD loader accepts image and label subdirectory names as command-line arguments. `run_bcd.sh` maps each dataset's existing names directly, including SYSU-CD's `time1/time2` and CDD's `OUT` mask folder. If you already ran the earlier adapter script, its `data_adapters` entries are symlinks only; the new runner ignores them, so they can be left in place without affecting training.
 
 ## Training
 

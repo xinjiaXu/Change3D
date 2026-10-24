@@ -44,7 +44,10 @@ def create_data_loaders(args, train_transform, val_transform):
     train_data = RSDataset.BCDDataset(
         file_root=args.file_root,
         split="train",
-        transform=train_transform
+        transform=train_transform,
+        image_dir_a=args.image_dir_a,
+        image_dir_b=args.image_dir_b,
+        label_dir=args.label_dir
     )
     train_loader = torch.utils.data.DataLoader(
         train_data,
@@ -59,7 +62,10 @@ def create_data_loaders(args, train_transform, val_transform):
     val_data = RSDataset.BCDDataset(
         file_root=args.file_root,
         split="val",
-        transform=val_transform
+        transform=val_transform,
+        image_dir_a=args.image_dir_a,
+        image_dir_b=args.image_dir_b,
+        label_dir=args.label_dir
     )
     val_loader = torch.utils.data.DataLoader(
         val_data,
@@ -73,7 +79,10 @@ def create_data_loaders(args, train_transform, val_transform):
     test_data = RSDataset.BCDDataset(
         file_root=args.file_root,
         split="test",
-        transform=val_transform
+        transform=val_transform,
+        image_dir_a=args.image_dir_a,
+        image_dir_b=args.image_dir_b,
+        label_dir=args.label_dir
     )
     test_loader = torch.utils.data.DataLoader(
         test_data,
@@ -395,6 +404,9 @@ if __name__ == '__main__':
         default="path/to/LEVIR-CD",
         help='path to the dataset directory'
     )
+    parser.add_argument('--image_dir_a', default='t1', help='T1 image subdirectory name')
+    parser.add_argument('--image_dir_b', default='t2', help='T2 image subdirectory name')
+    parser.add_argument('--label_dir', default='label', help='Binary change mask subdirectory name')
     parser.add_argument(
         '--in_height',
         type=int,
