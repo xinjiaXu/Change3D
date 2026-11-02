@@ -31,6 +31,18 @@ wget -O model/X3D_L.pyth https://dl.fbaipublicfiles.com/pytorchvideo/model_zoo/k
 bash prepare_server_data.sh /home/xxj/Data
 ```
 
+## Model complexity
+
+After activating `change3d-rs`, install the profiling dependency and count parameters/FLOPs for one paired 256x256 input:
+
+```bash
+python -m pip install -r requirements_profile.txt
+CUDA_VISIBLE_DEVICES=0 python profile_model.py --device cuda:0 \
+  --output Change3D_work_dirs/profile_256.json
+```
+
+The JSON reports total/trainable parameters and fvcore-counted operations. Unsupported operators are listed; the FLOP total is incomplete if that list is non-empty. Profiling initializes the BCD architecture without loading the X3D checkpoint.
+
 ## Train and test
 
 `run_bcd.sh` trains and then tests, using the existing defaults. Run one dataset at a time:
